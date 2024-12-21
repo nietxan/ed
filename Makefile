@@ -1,9 +1,7 @@
-BUILD := ./build 
-SRC := ./src 
 FLAGS := -Wall 
 
 all: 
-	$(CC) $(CFLAGS) $(SRC)/ed.c -o $(BUILD)/ed
+	$(CC) $(CFLAGS) src/ed.c -o build/ed
 
 clean: 
 	rm -rf $(BUILD)/*
