@@ -1,3 +1,4 @@
+#include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
@@ -7,7 +8,7 @@ int fcount(FILE *f)
 	char c;
 	int count;
 
-	while (1) {
+	for (;;) {
 		c = fgetc(f);
 		if (c == EOF)
 			break;
@@ -17,15 +18,16 @@ int fcount(FILE *f)
 	return count;
 }
 
-FILE *f;
-char *fname;
-char fbuf[2048];
-
 int main(int argc, char **argv)
 {
+	FILE *f;
+	char *fname;
+	// TODO: with dynamic array
+	char fbuf[4096];
+
 	if (argc > 1) {
 		fname = argv[1];
-		f = fopen(fname, "w+");
+		f = fopen(fname, "a+");
 		if (f == NULL) {
 			fprintf(stderr, "file error\n");
 			return 1;
@@ -34,25 +36,27 @@ int main(int argc, char **argv)
 	}
 
 	char input;
+	// TODO: with dynamic array
 	char buf[1024];
 
-	while (1) {
+	for (;;) {
 		scanf("%c", &input);
 		switch (input) {
 			case 'a':
-				while (1) {
+				for (;;) {
 					scanf("%s", buf);
 					if (!strcmp(buf, ".")) {
 						break;
 					}
-					strcat(fbuf, buf);
+					strncat(fbuf, buf, sizeof(fbuf) - strlen(fbuf) - 1);
+					strcat(fbuf, "\n");	
 				}
 				break;
 			case 'w':
-				printf("%d\n", fprintf(f, "%s\n", fbuf));
+				printf("%d\n", fprintf(f, "%s", fbuf));	
+				fclose(f);
 				break;
 			case 'q':
-				fclose(f);
 				return 0;
 		}
 	}
