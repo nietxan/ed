@@ -20,5 +20,5 @@ int main(int argc, char **argv)
 		printf("%d\n", fcount(f));
 	}
 
-	ed(f);		
+	ed(f);
 }

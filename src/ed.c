@@ -4,6 +4,5 @@
 
 int ed(FILE *f)
 {
-
 	return 0;
 }
