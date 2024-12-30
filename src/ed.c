@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
 
 #define INPUT_SIZE 1024
 
@@ -17,11 +16,11 @@ void strtrim(char *s)
 	memmove(s, p, l + 1);
 }
 
-int tokcount(char *input, char tok)
+int chrcount(char *input, char chr)
 {
 	int count = 0;
 	char *ptr = input;
-	while ((ptr = strchr(ptr, tok)) != NULL) {
+	while ((ptr = strchr(ptr, chr)) != NULL) {
 		count++;
 		ptr++;
 	}
@@ -32,6 +31,7 @@ int tokcount(char *input, char tok)
 
 int ed(FILE *f)
 {
+	char c;
 	char *temp;
 	char *input;
 	char *cmd[2];
@@ -45,7 +45,7 @@ int ed(FILE *f)
 		if (strcmp(input, "\n")) {
 			strtrim(input);
 
-			switch (tokcount(input, ' ')) {
+			switch (chrcount(input, ' ')) {
 				case 0:
 					if (strlen(input) == 1)
 						cmd[0] = input;
@@ -64,6 +64,18 @@ int ed(FILE *f)
 				if (cmd[1] == NULL) {
 					return 0;
 				}
+			case 'a':
+				;
+			case 'i':
+				;
+			case 'e':
+				;
+			case 'r':
+				;
+			case 'f':
+				;
+			case 'w':
+				;
 			default:
 				printf("?\n");
 				free(input);
