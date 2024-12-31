@@ -8,11 +8,11 @@
 int main(int argc, char **argv)
 {
 	FILE *f;
-	char *fname;
+	char *fn;
 
 	if (argc > 1) {
-		fname = argv[1];
-		f = fopen(fname, "a+");
+		fn = argv[1];
+		f = fopen(fn, "a+");
 		if (f == NULL) {
 			fprintf(stderr, "file error\n");
 			return 1;
@@ -20,5 +20,5 @@ int main(int argc, char **argv)
 		printf("%d\n", fcount(f));
 	}
 
-	ed(f);
+	return ed(f);
 }

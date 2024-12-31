@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+size_t ed(FILE *f);
+
 int fcount(FILE *f);
 
-int ed(FILE* f);
+char *fname(FILE *f);

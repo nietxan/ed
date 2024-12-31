@@ -3,7 +3,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define INPUT_SIZE 1024
+#include "ed.h"
+
+#define INPUT_SIZE 4096
 
 void strtrim(char *s)
 {
@@ -29,9 +31,9 @@ int chrcount(char *input, char chr)
 
 /* Main loop with command processing */	
 
-int ed(FILE *f)
+size_t ed(FILE *f)
 {
-	char c;
+	char *fn;
 	char *temp;
 	char *input;
 	char *cmd[2];
@@ -50,8 +52,8 @@ int ed(FILE *f)
 					if (strlen(input) == 1)
 						cmd[0] = input;
 				case 1:
-					temp = strtok(input, " ");
 					/* TODO: more advanced cmd processing */
+					temp = strtok(input, " ");
 					if (strlen(temp) == 1) {
 						cmd[0] = temp;
 						cmd[1] = strtok(NULL, " ");
@@ -73,7 +75,23 @@ int ed(FILE *f)
 			case 'r':
 				;
 			case 'f':
-				;
+				if (cmd[1] != NULL) {
+					fn = cmd[1];
+					f = fopen(fn, "a+");
+					if (f != NULL) {
+						printf("%d\n", fcount(f));
+						break;
+					}
+				}
+
+				if (f != NULL) {
+					fn = fname(f);
+					if (fn != NULL) {
+						printf("%s\n", fn);
+						free(fn);
+						break;
+					}
+				}
 			case 'w':
 				;
 			default:
