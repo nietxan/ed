@@ -12,14 +12,14 @@ typedef struct {
 	buffer *buf;
 } fstate;
 
-
 size_t ed(fstate *state);
+void set_fname(fstate *fs, char* fname);
 
 /* buffer */
-void init_buffer(buffer *buffer, size_t initial_capacity);
-void free_buffer(buffer *buffer);
-void extend(buffer *buffer, size_t new_capacity);
-void append(buffer *buffer, const char *data, size_t data_size);
+void init_buffer(buffer *buf, size_t initial_capacity);
+void append(buffer *buf, const char *data, size_t data_size);
+void set(buffer *buf, const char *data, size_t data_size);
 
 /* i/o */ 
-long fcount(FILE *f);
+size_t fsize(FILE *f);
+size_t fbuf(FILE *f, buffer *buf);

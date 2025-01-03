@@ -2,12 +2,23 @@
 #include <unistd.h>
 #include <sys/stat.h>
 
-#define MAX_SIZE 4096
+#include "ed.h"
 
-long fcount(FILE *f)
+size_t fsize(FILE *f)
 {
 	struct stat st;
 	fstat(fileno(f), &st);
 	return st.st_size;
+}
+
+size_t fbuf(FILE *f, buffer *buf) 
+{
+	size_t size = fsize(f);
+	char data[size];
+
+	fgets(data, size, f);
+	set(buf, data, size);
+
+	return size;
 }
 

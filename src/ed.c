@@ -31,10 +31,19 @@ int chrcount(char *input, char chr)
 	return count;
 }
 
+void set_fname(fstate *fs, char* fname)
+{
+	if (fs != NULL) {
+		free(fs->fname);
+	}
+	fs->fname = (char*)malloc(sizeof(char) * strlen(fname));
+	memcpy(fs->fname, fname, strlen(fname));
+}
+
 /* Main loop with command processing */	
 size_t ed(fstate *fs)
 {
-	char *temp;
+
 	char *cmd[2];
 	char input[INPUT_SIZE];
 
@@ -45,6 +54,8 @@ size_t ed(fstate *fs)
 		fgets(input, INPUT_SIZE, stdin);
 		if (strcmp(input, "\n")) {
 			strtrim(input);
+
+			char *temp;
 
 			switch (chrcount(input, ' ')) {
 				case 0:
@@ -61,6 +72,14 @@ size_t ed(fstate *fs)
 		}
 
 		switch ((int)(*cmd[0])) {
+			case '!':
+				if (cmd[1] != NULL) {
+					system(cmd[1]);
+					break;
+				}
+
+				unknown();
+				break;
 			case 'a':
 				break;
 			case 'i':
@@ -70,12 +89,27 @@ size_t ed(fstate *fs)
 			case 'w':
 				break;
 			case 'e':
-				/* TODO */
+				if (cmd[1] != NULL) {
+					set_fname(fs, cmd[1]);
+				}
 
+				if (fs->fname != NULL) {
+					FILE *f = fopen(fs->fname, "rb");
+					if (f == NULL) {
+						fprintf(stderr, "file error\n");
+						return 1;
+					}
+
+					printf("%zu\n", fbuf(f, fs->buf));
+					fclose(f);
+					break;
+				}
+
+				unknown();
 				break;
 			case 'f':
 				if (cmd[1] != NULL) {
-					fs->fname = cmd[1];
+					set_fname(fs, cmd[1]);
 				}
 
 				if (fs->fname != NULL) {
@@ -87,12 +121,17 @@ size_t ed(fstate *fs)
 				break;
 			case 'q':
 				if (cmd[1] == NULL) {
-					free_buffer(fs->buf);
+					free(fs->buf->data);
+					free(fs->buf);
+					free(fs->fname);
 					free(fs);
 					return 0;
 				}
+
 				unknown();
 				break;
+			default:
+				unknown();
 		}
 	}
 }
