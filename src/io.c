@@ -1,22 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <sys/stat.h>
 
 #define MAX_SIZE 4096
 
 int fcount(FILE *f)
 {
-	char c;
-	int count;
-
-	for (;;) {
-		c = fgetc(f);
-		if (c == EOF)
-			break;
-		++count;
-	}		
-
-	return count;
+	struct stat st;
+	fstat(fileno(f), &st);
+	return st.st_size;
 }
 
 char *fname(FILE *f)
@@ -33,7 +26,7 @@ char *fname(FILE *f)
 	r = readlink(proclnk, filename, MAX_SIZE);
 	if (r < 0)
 	{
-		fprintf(stderr, "failed to readlink\n");
+		free(filename);
 		return NULL;
 	}
 	filename[r] = '\0';

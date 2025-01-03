@@ -1,6 +1,11 @@
 #include <stdio.h>
 
-size_t ed(FILE *f);
+typedef struct {
+	char          *fname;
+	unsigned int  cursor;
+} fstate;
+
+size_t ed(fstate *state);
 
 int fcount(FILE *f);
 

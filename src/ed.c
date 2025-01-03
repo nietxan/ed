@@ -5,7 +5,9 @@
 
 #include "ed.h"
 
-#define INPUT_SIZE 4096
+#define INPUT_SIZE 1024
+
+#define unknown() printf("?\n");
 
 void strtrim(char *s)
 {
@@ -30,16 +32,13 @@ int chrcount(char *input, char chr)
 }
 
 /* Main loop with command processing */	
-
-size_t ed(FILE *f)
+size_t ed(fstate *fs)
 {
-	char *fn;
 	char *temp;
-	char *input;
 	char *cmd[2];
+	char input[INPUT_SIZE];
 
 	for (;;) {
-		input = (char*)malloc(INPUT_SIZE * sizeof(char));
 		cmd[0] = "?";
 		cmd[1] = "";
 
@@ -62,41 +61,36 @@ size_t ed(FILE *f)
 		}
 
 		switch ((int)(*cmd[0])) {
-			case 'q':
-				if (cmd[1] == NULL) {
-					return 0;
-				}
 			case 'a':
-				;
+				break;
 			case 'i':
-				;
-			case 'e':
-				;
+				break;
 			case 'r':
-				;
+				break;
+			case 'w':
+				break;
+			case 'e':
+				/* TODO */
+				break;
 			case 'f':
 				if (cmd[1] != NULL) {
-					fn = cmd[1];
-					f = fopen(fn, "a+");
-					if (f != NULL) {
-						printf("%d\n", fcount(f));
-						break;
-					}
+					fs->fname = cmd[1];
 				}
 
-				if (f != NULL) {
-					fn = fname(f);
-					if (fn != NULL) {
-						printf("%s\n", fn);
-						free(fn);
-						break;
-					}
+				if (fs->fname != NULL) {
+					printf("%s\n", fs->fname);
+					break;
 				}
-			case 'w':
-				;
-			default:
-				printf("?\n");
-				free(input);
+
+				unknown();
+				break;
+			case 'q':
+				if (cmd[1] == NULL) {
+					free(fs);
+					return 0;
+				}
+				unknown();
+				break;
 		}
 	}
 }
