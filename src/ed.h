@@ -1,12 +1,25 @@
 #include <stdio.h>
 
 typedef struct {
-	char          *fname;
-	unsigned int  cursor;
+    char   *data;
+    size_t size;     
+    size_t capacity; 
+} buffer;
+
+typedef struct {
+	char *fname;
+	int  cursor;
+	buffer *buf;
 } fstate;
+
 
 size_t ed(fstate *state);
 
-int fcount(FILE *f);
+/* buffer */
+void init_buffer(buffer *buffer, size_t initial_capacity);
+void free_buffer(buffer *buffer);
+void extend(buffer *buffer, size_t new_capacity);
+void append(buffer *buffer, const char *data, size_t data_size);
 
-char *fname(FILE *f);
+/* i/o */ 
+long fcount(FILE *f);

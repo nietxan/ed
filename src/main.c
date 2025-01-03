@@ -10,6 +10,7 @@ int main(int argc, char **argv)
 {
 	FILE *f;
 	fstate *fs;
+	long file_data_length;
 
 	fs = (fstate*)malloc(sizeof(fstate));
 
@@ -20,7 +21,11 @@ int main(int argc, char **argv)
 			fprintf(stderr, "file error\n");
 			return 1;
 		}
-		printf("%d\n", fcount(f));
+
+		file_data_length = fcount(f);
+		init_buffer(fs->buf, file_data_length);
+
+		printf("%ld\n", file_data_length);
 		fclose(f);
 	}
 

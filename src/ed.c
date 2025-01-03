@@ -71,6 +71,7 @@ size_t ed(fstate *fs)
 				break;
 			case 'e':
 				/* TODO */
+
 				break;
 			case 'f':
 				if (cmd[1] != NULL) {
@@ -86,6 +87,7 @@ size_t ed(fstate *fs)
 				break;
 			case 'q':
 				if (cmd[1] == NULL) {
+					free_buffer(fs->buf);
 					free(fs);
 					return 0;
 				}
